@@ -5,12 +5,12 @@ pub struct Seed{
 
 impl Seed {
     //解码
-    pub fn decode() -> Self{
-
-    }
-
-    //编码
-    pub fn encode() -> Self{
-
-    }
+    //pub fn decode() -> Self{
+//
+    //}
+//
+    ////编码
+    //pub fn encode() -> Self{
+//
+    //}
 }

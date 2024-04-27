@@ -1,10 +1,9 @@
 use bevy::{asset::AssetPath, prelude::*};
 use bevy_ecs_ldtk::{assets::LdtkProject, LdtkWorldBundle, LevelSet};
 
-use super::room_project::{RoomProject, RoomSize};
+use super::{error::RoomError, room_project::RoomProject, RoomSize};
 
-const MEDIUM_SIZE:[&str;1] = ["b8200460-fec0-11ee-8027-39315b1638ca"];
-
+pub const MEDIUM_SIZE: [&str; 1] = ["b8200460-fec0-11ee-8027-39315b1638ca"];
 
 #[derive(Default, Resource)]
 pub struct ZeroRoomProject {
@@ -30,20 +29,46 @@ impl RoomProject for ZeroRoomProject {
         self.room_hanle = asset_server.load(path);
     }
 
-    fn spawn(&self, commands: &mut Commands, room_size: RoomSize) -> Entity {
-        match room_size {
-            RoomSize::Medium => {
-                commands
+    fn spawn(
+        &self,
+        commands: &mut Commands,
+        transform: Transform,
+        room_size: RoomSize,
+    ) -> Result<Entity, RoomError> {
+        let level_set = match room_size {
+            RoomSize::Medium => LevelSet::from_iids(MEDIUM_SIZE),
+            _ => return Err(RoomError::NoSuchSize(room_size)),
+        };
+
+        Ok(commands
             .spawn((
                 ZeroRoomlMark,
                 LdtkWorldBundle {
-                    ldtk_handle: self.room_hanle.clone_weak(),
-                    level_set:LevelSet::from_iids(MEDIUM_SIZE),
+                    ldtk_handle: self.room_hanle.clone(),
+                    level_set,
+                    transform,
                     ..Default::default()
                 },
             ))
-            .id()
+            .id())
+    }
+
+    fn get(
+        &self,
+        room_size: RoomSize,
+    ) -> Result<(Self::RoomProjectMark, LdtkWorldBundle), RoomError> {
+        let level_set = match room_size {
+            RoomSize::Medium => LevelSet::from_iids(MEDIUM_SIZE),
+            _ => return Err(RoomError::NoSuchSize(room_size)),
+        };
+
+        Ok((
+            ZeroRoomlMark,
+            LdtkWorldBundle {
+                ldtk_handle: self.room_hanle.clone(),
+                level_set,
+                ..Default::default()
             },
-        }
+        ))
     }
 }
