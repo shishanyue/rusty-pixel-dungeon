@@ -1,14 +1,13 @@
+pub mod error;
+pub mod home_room;
 pub mod room_project;
 pub mod zero_room;
-pub mod error;
-
 
 use bevy::prelude::*;
 
-use crate::bevy_ext::AppExt;
+use crate::{bevy_ext::AppExt, system::SystemStatus};
 
 use self::{room_project::RoomProject, zero_room::ZeroRoomProject};
-
 
 #[derive(Debug)]
 pub enum RoomSize {
@@ -26,10 +25,16 @@ impl Plugin for RoomProjectPlugin {
     }
 }
 
-fn load_room(asset_server: Res<AssetServer>, mut zero_room_project: ResMut<ZeroRoomProject>) {
+fn load_room(
+    asset_server: Res<AssetServer>,
+    mut zero_room_project: ResMut<ZeroRoomProject>,
+    mut system_status: ResMut<SystemStatus>,
+) {
     zero_room_project.load(
         asset_server,
         "zero_room",
         "environment/rooms/zero_room.ldtk",
     );
+
+    system_status.inited_rooms = true;
 }

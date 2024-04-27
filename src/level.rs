@@ -14,15 +14,9 @@ use self::{ home_level::HomeLevel, level_project::LevelProject, zero_level::Zero
 
 
 
+pub struct LevelProjectPlugin;
 
-#[derive(Resource, Default)]
-pub struct LevelServer {
-
-}
-
-pub struct LevelServerPlugin;
-
-impl Plugin for LevelServerPlugin {
+impl Plugin for LevelProjectPlugin {
     fn build(&self, app: &mut App) {
         app
         .init_level::<ZeroLevel>()

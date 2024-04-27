@@ -1,11 +1,11 @@
 use bevy::{prelude::*, window::WindowMode};
 use bevy_ecs_ldtk::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use rusty_pixel_dungeon::room::{
+use rusty_pixel_dungeon::{room::{
     room_project::RoomProject,
     zero_room::{self, ZeroRoomProject, ZeroRoomlMark},
     RoomProjectPlugin, RoomSize,
-};
+}, RustyPixelDungeonPlugin};
 
 fn main() {
     let mut app = App::new();
@@ -23,8 +23,7 @@ fn main() {
             .set(ImagePlugin::default_nearest()),
     )
     .add_plugins(WorldInspectorPlugin::new())
-    .add_plugins(LdtkPlugin)
-    .add_plugins(RoomProjectPlugin)
+    .add_plugins(RustyPixelDungeonPlugin)
     .add_systems(Startup, setup)
     .add_systems(Update, change_room_size)
     .run();
@@ -38,6 +37,8 @@ fn setup(mut commands: Commands, zero_room: Res<ZeroRoomProject>) {
         Transform::from_xyz(0., 0., 0.),
         RoomSize::Medium,
     ).unwrap();
+    
+
     
 }
 
