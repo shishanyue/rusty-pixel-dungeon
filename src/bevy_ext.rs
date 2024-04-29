@@ -47,7 +47,7 @@ impl AppExt for App {
         states: SceneState,
         systems: impl IntoSystemConfigs<M>,
     ) -> &mut Self {
-        self.add_systems(OnEnter(states.clone()), systems)
+        self.add_systems(OnEnter(states), systems)
             .add_systems(OnExit(states), despawn_screen::<T>)
     }
 }

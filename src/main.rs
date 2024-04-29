@@ -2,6 +2,7 @@
 
 use bevy::{prelude::*, window::WindowMode};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use rusty_pixel_dungeon::RustyPixelDungeonPlugin;
 
 fn main() {
     let mut app = App::new();
@@ -12,14 +13,14 @@ fn main() {
             ..default()
         }),
         ..default()
-    }));
+    }).set(ImagePlugin::default_nearest()));
     #[cfg(debug_assertions)]
-    app.add_plugins(WorldInspectorPlugin::new());
-
+    app.add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(RustyPixelDungeonPlugin)
+        .add_systems(Startup, setup)
+        .run();
 }
 
-
-
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    
+fn setup(mut commands: Commands) {
+    commands.spawn(Camera2dBundle::default());
 }
