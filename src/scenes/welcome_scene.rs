@@ -1,5 +1,5 @@
 use crate::{bevy_ext::AppExt, system::SystemStatus};
-use autodefault::autodefault;
+
 use bevy::prelude::*;
 
 use super::{Scene, SceneState};
@@ -20,7 +20,6 @@ impl Scene for WelcomeScene {
     }
 }
 
-#[autodefault]
 fn setup(mut commands: Commands) {
     commands.spawn((
         WelcomeSceneMark,
@@ -30,8 +29,10 @@ fn setup(mut commands: Commands) {
                 height: Val::Percent(100.),
                 justify_self: JustifySelf::Center,
                 position_type: PositionType::Absolute,
+                ..Default::default()
             },
             background_color: BackgroundColor(Color::BLACK),
+            ..Default::default()
         },
     ));
 }

@@ -36,7 +36,6 @@ leafwing-input-manager = "0.13.3"
 bevy-inspector-egui = "0.24.0"
 toml = "0.8.12"
 bevy_kira_audio = "0.19.0"
-autodefault = "2.0.0"
 bevy_ecs_ldtk ={ path = "./crates/bevy_ecs_ldtk/"}
 rand = "0.8.5"
 time = "0.3.36"

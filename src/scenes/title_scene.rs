@@ -2,8 +2,9 @@ use crate::{
     assets::{AppRes, PixelDungeon, PixelDungeonSigns},
     bevy_ext::AppExt,
 };
-use autodefault::autodefault;
-use bevy::{prelude::*, ui::widget::UiImageSize};
+use bevy::prelude::*;
+use bevy_tween::prelude::*;
+use bevy_tween::tween::TargetComponent;
 
 use super::{Scene, SceneState};
 
@@ -21,6 +22,18 @@ impl Scene for TitleScene {
 }
 
 fn setup(mut commands: Commands, app_res: Res<AppRes>) {
+    let angle_start = 0.;
+    let angle_end = std::f32::consts::PI * 2.;
+
+    let start_x = -300.;
+    let end_x = 300.;
+
+    let spacing_y = 100.;
+    let offset_y = -(spacing_y * 3.) / 2.;
+
+    // Everything in the same entity
+    let y = 0. * spacing_y + offset_y;
+
     commands
         .spawn((
             TitleSceneMark,
@@ -37,26 +50,44 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
             },
         ))
         .with_children(|parent| {
-            parent.spawn((
-                AtlasImageBundle {
-                    image: UiImage::new(app_res.banners.texture_handle.clone()),
-                    texture_atlas: app_res.banners.pixel_dungeon_atlas.clone(),
-                    ..Default::default()
-                },
-                PixelDungeon,
-            )).with_children(|parent|{
-                parent.spawn((
+            parent
+                .spawn((
                     AtlasImageBundle {
                         style: Style {
+                            justify_content: JustifyContent::Center,
                             ..Default::default()
                         },
                         image: UiImage::new(app_res.banners.texture_handle.clone()),
-                        texture_atlas: app_res.banners.pixel_dungeon_signs_atlas.clone(),
+                        texture_atlas: app_res.banners.pixel_dungeon_atlas.clone(),
                         ..Default::default()
                     },
-                    PixelDungeonSigns,
-                ));
-            });
+                    PixelDungeon,
+                ))
+                .with_children(|parent| {
+                    parent.spawn((
+                        AtlasImageBundle {
+                            style: Style {
+                                width: Val::Percent(95.),
+                                ..Default::default()
+                            },
+                            image: UiImage::new(app_res.banners.texture_handle.clone()),
+                            texture_atlas: app_res.banners.pixel_dungeon_signs_atlas.clone(),
+                            ..Default::default()
+                        },
+                        PixelDungeonSigns,
+                        SpanTweenerBundle::new(Duration::from_secs(3))
+                            .with_repeat(Repeat::Infinitely),
+                        SpanTweenBundle::new(..Duration::from_secs(3)),
+                        EaseFunction::SineIn,
+                        ComponentTween::new_target(
+                            TargetComponent::tweener_entity(),
+                            interpolate::Translation {
+                                start: Vec3::new(start_x, y, 0.),
+                                end: Vec3::new(end_x, y, 0.),
+                            },
+                        ),
+                    ));
+                });
         });
 }
 

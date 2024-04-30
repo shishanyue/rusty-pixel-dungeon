@@ -1,5 +1,3 @@
-#![feature(associated_type_defaults)]
-
 use bevy::{prelude::*, window::WindowMode};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use rusty_pixel_dungeon::RustyPixelDungeonPlugin;
@@ -7,13 +5,17 @@ use rusty_pixel_dungeon::RustyPixelDungeonPlugin;
 fn main() {
     let mut app = App::new();
 
-    app.add_plugins(DefaultPlugins.set(WindowPlugin {
-        primary_window: Some(Window {
-            mode: WindowMode::Windowed,
-            ..default()
-        }),
-        ..default()
-    }).set(ImagePlugin::default_nearest()));
+    app.add_plugins(
+        DefaultPlugins
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    mode: WindowMode::Windowed,
+                    ..default()
+                }),
+                ..default()
+            })
+            .set(ImagePlugin::default_nearest()),
+    );
     #[cfg(debug_assertions)]
     app.add_plugins(WorldInspectorPlugin::new())
         .add_plugins(RustyPixelDungeonPlugin)
