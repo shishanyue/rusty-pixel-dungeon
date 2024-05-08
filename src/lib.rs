@@ -15,6 +15,9 @@ pub mod room;
 pub mod scenes;
 pub mod system;
 pub mod utils;
+pub mod custom_bundle;
+pub mod plane;
+
 
 pub struct RustyPixelDungeonPlugin;
 

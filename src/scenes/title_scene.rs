@@ -1,10 +1,9 @@
 use crate::{
-    assets::{AppRes, PixelDungeon, PixelDungeonSigns},
+    assets::{banners::{PixelDungeon, PixelDungeonSigns}, AppRes},
     bevy_ext::AppExt,
+    custom_bundle::AtlasButtonBundle,
 };
 use bevy::prelude::*;
-use bevy_tween::prelude::*;
-use bevy_tween::tween::TargetComponent;
 
 use super::{Scene, SceneState};
 
@@ -22,18 +21,6 @@ impl Scene for TitleScene {
 }
 
 fn setup(mut commands: Commands, app_res: Res<AppRes>) {
-    let angle_start = 0.;
-    let angle_end = std::f32::consts::PI * 2.;
-
-    let start_x = -300.;
-    let end_x = 300.;
-
-    let spacing_y = 100.;
-    let offset_y = -(spacing_y * 3.) / 2.;
-
-    // Everything in the same entity
-    let y = 0. * spacing_y + offset_y;
-
     commands
         .spawn((
             TitleSceneMark,
@@ -44,6 +31,7 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                     justify_self: JustifySelf::Center,
                     justify_content: JustifyContent::Center,
                     position_type: PositionType::Absolute,
+                    flex_direction: FlexDirection::Column,
                     ..Default::default()
                 },
                 ..Default::default()
@@ -75,18 +63,36 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                             ..Default::default()
                         },
                         PixelDungeonSigns,
-                        SpanTweenerBundle::new(Duration::from_secs(3))
-                            .with_repeat(Repeat::Infinitely),
-                        SpanTweenBundle::new(..Duration::from_secs(3)),
-                        EaseFunction::SineIn,
-                        ComponentTween::new_target(
-                            TargetComponent::tweener_entity(),
-                            interpolate::Translation {
-                                start: Vec3::new(start_x, y, 0.),
-                                end: Vec3::new(end_x, y, 0.),
-                            },
-                        ),
                     ));
+                });
+
+            parent
+                .spawn(NodeBundle {
+                    style: Style {
+                        width: Val::Auto,
+                        height: Val::Percent(100.),
+                        justify_self: JustifySelf::Center,
+                        justify_content: JustifyContent::SpaceAround,
+                        flex_direction: FlexDirection::Column,
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                })
+                .with_children(|parent| {
+                    parent
+                        .spawn((
+                            AtlasButtonBundle {
+                                style: Style {
+                                    width: Val::Percent(25.),
+                                    ..Default::default()
+                                },
+                                image: UiImage::new(app_res.chrome.texture_handle.clone()),
+                                texture_atlas: app_res.chrome.grey_button_tr_atlas.clone(),
+                                ..Default::default()
+                            },
+                            ImageScaleMode::Sliced(app_res.chrome.grey_button_tr_slicer.clone()),
+                        ))
+                        .with_children(|parent| {});
                 });
         });
 }

@@ -1,10 +1,5 @@
-use bevy::{
-    app::App,
-    ecs::{
-        component::Component,
-        schedule::{IntoSystemConfigs, OnEnter, OnExit},
-    },
-};
+use bevy::prelude::*;
+
 
 use crate::{
     level::level_project::LevelProject,
@@ -49,5 +44,24 @@ impl AppExt for App {
     ) -> &mut Self {
         self.add_systems(OnEnter(states), systems)
             .add_systems(OnExit(states), despawn_screen::<T>)
+    }
+}
+
+pub fn add_atlas_layout(
+    atlas_layout:TextureAtlasLayout,
+    atlas_layout_res: &mut ResMut<Assets<TextureAtlasLayout>>,
+) -> Handle<TextureAtlasLayout> {
+    atlas_layout_res.add(atlas_layout)
+}
+
+
+pub fn add_atlas_with_rect(
+    atlas_layout_handle:&Handle<TextureAtlasLayout>,
+    rect:Rect,
+    atlas_layouts:&mut Assets<TextureAtlasLayout>
+) -> TextureAtlas{
+    TextureAtlas {
+        layout: atlas_layout_handle.clone(),
+        index: atlas_layouts.get_mut(atlas_layout_handle).unwrap().add_texture(rect),
     }
 }
