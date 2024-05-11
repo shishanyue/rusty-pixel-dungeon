@@ -1,5 +1,6 @@
-use bevy::prelude::*;
+pub mod error;
 
+use bevy::prelude::*;
 
 use crate::{
     level::level_project::LevelProject,
@@ -48,20 +49,22 @@ impl AppExt for App {
 }
 
 pub fn add_atlas_layout(
-    atlas_layout:TextureAtlasLayout,
+    atlas_layout: TextureAtlasLayout,
     atlas_layout_res: &mut ResMut<Assets<TextureAtlasLayout>>,
 ) -> Handle<TextureAtlasLayout> {
     atlas_layout_res.add(atlas_layout)
 }
 
-
-pub fn add_atlas_with_rect(
-    atlas_layout_handle:&Handle<TextureAtlasLayout>,
-    rect:Rect,
-    atlas_layouts:&mut Assets<TextureAtlasLayout>
-) -> TextureAtlas{
+pub fn add_atlas_by_rect(
+    atlas_layout_handle: &Handle<TextureAtlasLayout>,
+    rect: Rect,
+    atlas_layouts: &mut Assets<TextureAtlasLayout>,
+) -> TextureAtlas {
     TextureAtlas {
         layout: atlas_layout_handle.clone(),
-        index: atlas_layouts.get_mut(atlas_layout_handle).unwrap().add_texture(rect),
+        index: atlas_layouts
+            .get_mut(atlas_layout_handle)
+            .unwrap()
+            .add_texture(rect),
     }
 }

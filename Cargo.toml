@@ -20,7 +20,7 @@ unsafe_op_in_unsafe_fn = "warn"
 missing_docs = "allow"
 
 [workspace]
-members = ["crates/*"]
+members = [ "crates/*"]
 
 [lints]
 workspace = true
@@ -40,6 +40,8 @@ bevy_ecs_ldtk ={ path = "./crates/bevy_ecs_ldtk/"}
 rand = "0.8.5"
 time = "0.3.36"
 crossbeam-channel = "0.5.12"
+image = "0.24.9"
+bevy_async_task = "0.1.1"
 
 
 [profile.release]

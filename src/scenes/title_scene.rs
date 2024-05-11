@@ -1,7 +1,9 @@
 use crate::{
-    assets::{banners::{PixelDungeon, PixelDungeonSigns}, AppRes},
+    assets::{
+        app_res::AppRes,
+        banners::{PixelDungeon, PixelDungeonSigns},
+    },
     bevy_ext::AppExt,
-    custom_bundle::AtlasButtonBundle,
 };
 use bevy::prelude::*;
 
@@ -81,18 +83,30 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                 .with_children(|parent| {
                     parent
                         .spawn((
-                            AtlasButtonBundle {
+                            ButtonBundle {
                                 style: Style {
                                     width: Val::Percent(25.),
                                     ..Default::default()
                                 },
-                                image: UiImage::new(app_res.chrome.texture_handle.clone()),
-                                texture_atlas: app_res.chrome.grey_button_tr_atlas.clone(),
+                                image: UiImage::new(app_res.chrome.grey_button_tr_handle.clone()),
                                 ..Default::default()
                             },
-                            ImageScaleMode::Sliced(app_res.chrome.grey_button_tr_slicer.clone()),
+                            ImageScaleMode::Tiled {
+                                tile_x: true,
+                                tile_y: true,
+                                stretch_value: 4.,
+                            },
                         ))
-                        .with_children(|parent| {});
+                        .with_children(|parent| {
+                            parent.spawn(TextBundle::from_section(
+                                "Button",
+                                TextStyle {
+                                    font_size: 40.0,
+                                    color: Color::rgb(0.9, 0.9, 0.9),
+                                    ..Default::default()
+                                },
+                            ));
+                        });
                 });
         });
 }

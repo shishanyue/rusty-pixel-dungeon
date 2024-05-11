@@ -2,6 +2,7 @@ use assets::AssetsPlugin;
 use bevy::app::{App, Plugin, PluginGroup, PluginGroupBuilder};
 use bevy_ecs_ldtk::LdtkPlugin;
 use bevy_tween::DefaultTweenPlugins;
+use custom::CustomPlugins;
 use level::LevelProjectPlugin;
 use room::RoomProjectPlugin;
 use scenes::ScenePlugin;
@@ -10,20 +11,19 @@ use system::SystemPlugin;
 pub mod actors;
 pub mod assets;
 pub mod bevy_ext;
+pub mod custom;
 pub mod level;
+pub mod panel;
 pub mod room;
 pub mod scenes;
 pub mod system;
 pub mod utils;
-pub mod custom_bundle;
-pub mod plane;
-
 
 pub struct RustyPixelDungeonPlugin;
 
 impl Plugin for RustyPixelDungeonPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((RustyPixelDungeonPlugins, DefaultTweenPlugins));
+        app.add_plugins((RustyPixelDungeonPlugins, CustomPlugins, DefaultTweenPlugins));
     }
 }
 pub struct RustyPixelDungeonPlugins;

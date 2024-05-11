@@ -1,37 +1,28 @@
 use bevy::prelude::*;
 
-use crate::bevy_ext::{add_atlas_layout, add_atlas_with_rect};
+use crate::custom::assets::dynamic_image::DynamicImage;
 
-use super::{assets_path::AppAssetsPath, AppRes};
+use super::{AppAssetsHandles, AppRes};
 
 #[derive(Default)]
 pub struct ChromeRes {
-    pub texture_handle: Handle<Image>,
-    pub grey_button_tr_slicer:TextureSlicer,
-    pub grey_button_tr_atlas: TextureAtlas,
+    pub grey_button_tr_handle: Handle<Image>,
+    pub grey_button_tr_slicer: TextureSlicer,
 }
-
-
 
 impl ChromeRes {
     pub fn load(
         app_res: &mut ResMut<AppRes>,
-        app_assets_path: &Res<AppAssetsPath>,
-        asset_server: &Res<AssetServer>,
-        atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
+        app_assets_handles: &Res<AppAssetsHandles>,
+        dynamic_images: &mut ResMut<Assets<DynamicImage>>,
+        images: &mut ResMut<Assets<Image>>,
     ) {
-        let chrome_handle = asset_server.load(&app_assets_path.chrome);
+        let texture_handle = app_assets_handles.chrome.clone();
 
-        let chrome_atlas_layout_handle = add_atlas_layout(
-            TextureAtlasLayout::new_empty(Vec2::new(128., 64.)),
-            atlas_layouts,
-        );
+        let chrome_image = dynamic_images.get(texture_handle.clone()).unwrap();
+        let grey_button_tr_image = chrome_image.uv_by_rect(20, 9, 9, 9);
 
-        app_res.chrome.grey_button_tr_atlas = add_atlas_with_rect(
-            &chrome_atlas_layout_handle,
-            Rect::new(20., 9., 29., 18.),
-            atlas_layouts,
-        );
+        app_res.chrome.grey_button_tr_handle = images.add(grey_button_tr_image.to_image());
 
         app_res.chrome.grey_button_tr_slicer = TextureSlicer {
             border: BorderRect::square(4.0),
@@ -39,6 +30,5 @@ impl ChromeRes {
             sides_scale_mode: SliceScaleMode::Stretch,
             max_corner_scale: 1.0,
         };
-        app_res.chrome.texture_handle = chrome_handle;
     }
 }

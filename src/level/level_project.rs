@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 
-
 pub trait LevelProject
 where
     Self: Send + Sync + Default + Resource,
@@ -11,9 +10,7 @@ where
     fn build(&self, app: &mut App);
 }
 
-
 #[derive(Component)]
 pub struct NullLevelType;
 
 pub type LevelName = String;
-

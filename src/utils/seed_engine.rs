@@ -1,7 +1,12 @@
-use super::seed::Seed;
 
 pub struct SeedEngine{
     rng:rand::rngs::StdRng,
+}
+
+impl Default for SeedEngine {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SeedEngine {

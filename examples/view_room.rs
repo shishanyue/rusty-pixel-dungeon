@@ -4,8 +4,7 @@ use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use rusty_pixel_dungeon::{
     room::{
         room_project::RoomProject,
-        zero_room::{self, ZeroRoomProject, ZeroRoomlMark},
-        RoomProjectPlugin, RoomSize,
+        zero_room::{self, ZeroRoomProject, ZeroRoomlMark}, RoomSize,
     },
     RustyPixelDungeonPlugin,
 };
