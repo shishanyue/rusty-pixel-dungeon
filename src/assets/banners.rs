@@ -1,14 +1,13 @@
 use bevy::prelude::*;
 
-use crate::bevy_ext::{add_atlas_by_rect, add_atlas_layout};
+use crate::custom::assets::dynamic_image::DynamicImage;
 
 use super::{AppAssetsHandles, AppRes};
 
 #[derive(Default)]
 pub struct BannersRes {
-    pub texture_handle: Handle<Image>,
-    pub pixel_dungeon_atlas: TextureAtlas,
-    pub pixel_dungeon_signs_atlas: TextureAtlas,
+    pub pixel_dungeon_handle: Handle<Image>,
+    pub pixel_dungeon_signs_handle: Handle<Image>,
 }
 
 #[derive(Component)]
@@ -20,27 +19,19 @@ impl BannersRes {
     pub fn load(
         app_res: &mut ResMut<AppRes>,
         app_assets_handles: &Res<AppAssetsHandles>,
-        atlas_layouts: &mut ResMut<Assets<TextureAtlasLayout>>,
+        dynamic_images: &mut ResMut<Assets<DynamicImage>>,
+        images: &mut ResMut<Assets<Image>>,
     ) {
         let texture_handle = app_assets_handles.banners.clone();
 
-        let banners_atlas_layout_handle = add_atlas_layout(
-            TextureAtlasLayout::new_empty(Vec2::new(256., 256.)),
-            atlas_layouts,
+        let banners_image = dynamic_images.get(texture_handle.clone()).unwrap();
+        app_res.banners.pixel_dungeon_handle =
+            images.add(banners_image.uv_by_rect(0, 0, 132, 90).to_image());
+        app_res.banners.pixel_dungeon_signs_handle = images.add(
+            banners_image
+                .uv_by_rect(132, 0, 256, 90)
+                .brighten(150)
+                .to_image(),
         );
-
-        app_res.banners.pixel_dungeon_atlas = add_atlas_by_rect(
-            &banners_atlas_layout_handle,
-            Rect::new(0., 0., 132., 90.),
-            atlas_layouts,
-        );
-
-        app_res.banners.pixel_dungeon_signs_atlas = add_atlas_by_rect(
-            &banners_atlas_layout_handle,
-            Rect::new(132., 0., 256., 90.),
-            atlas_layouts,
-        );
-
-        app_res.banners.texture_handle = texture_handle;
     }
 }

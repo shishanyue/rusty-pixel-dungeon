@@ -1,4 +1,4 @@
-use bevy::{asset::AssetLoader, prelude::*};
+use bevy::prelude::*;
 
 use crate::custom::assets::app_assets_path::AppAssetsPath;
 

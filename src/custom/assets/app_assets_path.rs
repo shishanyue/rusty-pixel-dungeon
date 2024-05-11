@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct AppAssetsPath {
     pub banners: String,
     pub chrome: String,
+    pub font:String
 }
 
 impl Default for AppAssetsPath {
@@ -12,6 +13,7 @@ impl Default for AppAssetsPath {
         Self {
             banners: "interfaces/banners.png".to_string(),
             chrome: "interfaces/chrome.png".to_string(),
+            font: "fonts/fusion_pixel.ttf".to_string()
         }
     }
 }

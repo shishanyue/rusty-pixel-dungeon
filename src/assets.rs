@@ -24,8 +24,9 @@ pub enum AppAssetsState {
 
 #[derive(Debug, Resource)]
 pub struct AppAssetsHandles {
-    pub banners: Handle<Image>,
+    pub banners: Handle<DynamicImage>,
     pub chrome: Handle<DynamicImage>,
+    pub font: Handle<Font>,
 }
 
 impl Plugin for AssetsPlugin {
@@ -57,6 +58,7 @@ fn load_assets(
     commands.insert_resource(AppAssetsHandles {
         banners: asset_server.load(&app_assets_path.banners),
         chrome: asset_server.load(&app_assets_path.chrome),
+        font: asset_server.load(&app_assets_path.font),
     });
 }
 
@@ -67,6 +69,7 @@ fn check_assets_ready(
 ) {
     if asset_server.is_loaded_with_dependencies(&app_assets_handles.banners)
         && asset_server.is_loaded_with_dependencies(&app_assets_handles.chrome)
+        && asset_server.is_loaded_with_dependencies(&app_assets_handles.font)
     {
         assets_state.set(AppAssetsState::Loaded);
     }

@@ -22,4 +22,9 @@ impl DynamicImage {
             asset_usage: self.asset_usage,
         }
     }
+
+    pub fn brighten(&mut self, value: i32) -> &mut Self {
+        self.dyn_img.brighten(value);
+        self
+    }
 }

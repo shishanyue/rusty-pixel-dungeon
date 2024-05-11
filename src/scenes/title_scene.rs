@@ -28,10 +28,11 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
             TitleSceneMark,
             NodeBundle {
                 style: Style {
-                    width: Val::Auto,
-                    height: Val::Percent(50.),
+                    width: Val::Percent(100.),
+                    height: Val::Percent(100.),
+                    align_items:AlignItems::Center,
                     justify_self: JustifySelf::Center,
-                    justify_content: JustifyContent::Center,
+                    justify_content: JustifyContent::FlexStart,
                     position_type: PositionType::Absolute,
                     flex_direction: FlexDirection::Column,
                     ..Default::default()
@@ -42,26 +43,31 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
         .with_children(|parent| {
             parent
                 .spawn((
-                    AtlasImageBundle {
+                    ImageBundle {
                         style: Style {
+                            align_items: AlignItems::Center,
                             justify_content: JustifyContent::Center,
+                            width: Val::Percent(35.),
+                            margin: UiRect {
+                                top: Val::Percent(4.),
+                                bottom: Val::Percent(6.),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         },
-                        image: UiImage::new(app_res.banners.texture_handle.clone()),
-                        texture_atlas: app_res.banners.pixel_dungeon_atlas.clone(),
+                        image: UiImage::new(app_res.banners.pixel_dungeon_handle.clone()),
                         ..Default::default()
                     },
                     PixelDungeon,
                 ))
                 .with_children(|parent| {
                     parent.spawn((
-                        AtlasImageBundle {
+                        ImageBundle {
                             style: Style {
-                                width: Val::Percent(95.),
+                                width: Val::Percent(94.),
                                 ..Default::default()
                             },
-                            image: UiImage::new(app_res.banners.texture_handle.clone()),
-                            texture_atlas: app_res.banners.pixel_dungeon_signs_atlas.clone(),
+                            image: UiImage::new(app_res.banners.pixel_dungeon_signs_handle.clone()),
                             ..Default::default()
                         },
                         PixelDungeonSigns,
@@ -74,7 +80,7 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                         width: Val::Auto,
                         height: Val::Percent(100.),
                         justify_self: JustifySelf::Center,
-                        justify_content: JustifyContent::SpaceAround,
+                        justify_content: JustifyContent::FlexStart,
                         flex_direction: FlexDirection::Column,
                         ..Default::default()
                     },
@@ -85,17 +91,15 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                         .spawn((
                             ButtonBundle {
                                 style: Style {
-                                    width: Val::Percent(25.),
+                                    justify_content: JustifyContent::Center,
+                                    align_items: AlignItems::Center,
+                                    padding: UiRect::all(Val::Px(5.)),
                                     ..Default::default()
                                 },
                                 image: UiImage::new(app_res.chrome.grey_button_tr_handle.clone()),
                                 ..Default::default()
                             },
-                            ImageScaleMode::Tiled {
-                                tile_x: true,
-                                tile_y: true,
-                                stretch_value: 4.,
-                            },
+                            ImageScaleMode::Sliced(app_res.chrome.grey_button_tr_slicer.clone()),
                         ))
                         .with_children(|parent| {
                             parent.spawn(TextBundle::from_section(
@@ -103,7 +107,7 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                                 TextStyle {
                                     font_size: 40.0,
                                     color: Color::rgb(0.9, 0.9, 0.9),
-                                    ..Default::default()
+                                    font:app_res.font.clone()
                                 },
                             ));
                         });
