@@ -1,10 +1,4 @@
-use crate::{
-    assets::{
-        app_res::AppRes,
-        banners::{PixelDungeon, PixelDungeonSigns},
-    },
-    bevy_ext::AppExt,
-};
+use crate::{bevy_ext::AppExt, custom::resource::{AppRes, banners::{PixelDungeon, PixelDungeonSigns}}};
 use bevy::prelude::*;
 
 use super::{Scene, SceneState};
@@ -103,11 +97,11 @@ fn setup(mut commands: Commands, app_res: Res<AppRes>) {
                         ))
                         .with_children(|parent| {
                             parent.spawn(TextBundle::from_section(
-                                "Button",
+                                "进入地牢",
                                 TextStyle {
                                     font_size: 40.0,
                                     color: Color::rgb(0.9, 0.9, 0.9),
-                                    font:app_res.font.clone()
+                                    font:app_res.han_sans_font.clone()
                                 },
                             ));
                         });

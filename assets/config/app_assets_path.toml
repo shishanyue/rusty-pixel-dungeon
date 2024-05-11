@@ -1,3 +1,4 @@
 banners = "interfaces/banners.png"
 chrome = "interfaces/chrome.png"
-font = "fonts/fusion_pixel.ttf"
+fusion_pixel_font = "fonts/fusion_pixel.ttf"
+han_sans_font = "fonts/SourceHanSansSC-Light.otf"

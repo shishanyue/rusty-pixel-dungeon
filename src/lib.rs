@@ -1,4 +1,3 @@
-use assets::AssetsPlugin;
 use bevy::app::{App, Plugin, PluginGroup, PluginGroupBuilder};
 use bevy_ecs_ldtk::LdtkPlugin;
 use bevy_tween::DefaultTweenPlugins;
@@ -9,7 +8,6 @@ use scenes::ScenePlugin;
 use system::SystemPlugin;
 
 pub mod actors;
-pub mod assets;
 pub mod bevy_ext;
 pub mod custom;
 pub mod level;
@@ -36,8 +34,7 @@ impl PluginGroup for RustyPixelDungeonPlugins {
             .add(RoomProjectPlugin)
             .add(LevelProjectPlugin)
             .add(ScenePlugin)
-            .add(SystemPlugin)
-            .add(AssetsPlugin);
+            .add(SystemPlugin);
         group
     }
 }

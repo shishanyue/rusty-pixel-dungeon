@@ -16,7 +16,7 @@ fn main() {
             })
             .set(ImagePlugin::default_nearest()),
     );
-    #[cfg(debug_assertions)]
+    
     app.add_plugins(WorldInspectorPlugin::new())
         .add_plugins(RustyPixelDungeonPlugin)
         .add_systems(Startup, setup)
