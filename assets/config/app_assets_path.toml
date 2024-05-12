@@ -1,4 +1,13 @@
+[image]
 banners = "interfaces/banners.png"
 chrome = "interfaces/chrome.png"
-fusion_pixel_font = "fonts/fusion_pixel.ttf"
-han_sans_font = "fonts/SourceHanSansSC-Light.otf"
+icons = "interfaces/icons.png"
+[font]
+bold = "fonts/SourceHanSansCN-Bold.otf"
+extra_light = "fonts/SourceHanSansCN-ExtraLight.otf"
+heavy = "fonts/SourceHanSansCN-Heavy.otf"
+light = "fonts/SourceHanSansCN-Light.otf"
+medium = "fonts/SourceHanSansCN-Medium.otf"
+normal = "fonts/SourceHanSansCN-Normal.otf"
+regular = "fonts/SourceHanSansCN-Regular.otf"
+fusion_pixel = "fonts/fusion_pixel.ttf"

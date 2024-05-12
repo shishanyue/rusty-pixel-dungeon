@@ -8,6 +8,7 @@ pub mod assets;
 pub mod bundle;
 pub mod loader;
 pub mod resource;
+pub mod handle;
 
 pub struct CustomPlugins;
 
