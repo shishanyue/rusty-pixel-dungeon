@@ -25,18 +25,54 @@ impl Scene for TitleScene {
 fn setup(mut commands: Commands, app_res: Res<AppResource>) {
     let text_white_style = TextStyle {
         font: app_res.app_font.bold.clone(),
-        font_size: 40.,
+        font_size: 30.,
         color: Color::WHITE,
     };
     let text_gold_style = TextStyle {
         font: app_res.app_font.bold.clone(),
-        font_size: 40.,
+        font_size: 30.,
         color: Color::GOLD,
     };
 
     let button_image = app_res.app_image.chrome.grey_button_tr_handle.clone();
     let slicer = app_res.app_image.chrome.grey_button_tr_slicer.clone();
     let icons = app_res.app_image.icons.clone();
+    let icon_style = Style {
+        width: Val::Px(30.),
+        margin: UiRect {
+            right: Val::Px(10.),
+            top: Val::Px(10.),
+            bottom: Val::Px(10.),
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+
+    let two_button_style = Style {
+        align_items: AlignItems::Center,
+        justify_content: JustifyContent::Center,
+        width: Val::Percent(45.),
+        padding: UiRect {
+            top: Val::Px(5.),
+            bottom: Val::Px(5.),
+            left: Val::Px(20.),
+            right: Val::Px(20.),
+        },
+        ..Default::default()
+    };
+
+    let three_button_style = Style {
+        align_items: AlignItems::Center,
+        justify_content: JustifyContent::Center,
+        width: Val::Percent(30.),
+        padding: UiRect {
+            top: Val::Px(5.),
+            bottom: Val::Px(5.),
+            left: Val::Px(20.),
+            right: Val::Px(20.),
+        },
+        ..Default::default()
+    };
 
     commands
         .spawn((
@@ -64,8 +100,8 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                             justify_content: JustifyContent::Center,
                             width: Val::Percent(35.),
                             margin: UiRect {
-                                top: Val::Percent(4.),
-                                bottom: Val::Percent(6.),
+                                top: Val::Percent(1.),
+                                bottom: Val::Percent(2.),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -115,28 +151,10 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                             ..Default::default()
                         })
                         .with_children(|parent| {
-                            let button_style = Style {
-                                align_items: AlignItems::Center,
-                                justify_content: JustifyContent::Center,
-                                width: Val::Percent(45.),
-                                padding: UiRect {
-                                    top: Val::Px(5.),
-                                    bottom: Val::Px(5.),
-                                    left: Val::Px(20.),
-                                    right: Val::Px(20.),
-                                },
-                                ..Default::default()
-                            };
-                            let icon_style = Style {
-                                width: Val::Px(50.),
-                                margin: UiRect::right(Val::Px(10.)),
-                                ..Default::default()
-                            };
-
                             create_button(
                                 parent,
                                 button_image.clone(),
-                                button_style.clone(),
+                                two_button_style.clone(),
                                 slicer.clone(),
                                 icons.enter_handle,
                                 icon_style.clone(),
@@ -146,12 +164,58 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                             create_button(
                                 parent,
                                 button_image.clone(),
-                                button_style.clone(),
+                                two_button_style.clone(),
                                 slicer.clone(),
                                 icons.gold_handle,
                                 icon_style.clone(),
                                 "支持游戏开发",
                                 text_gold_style.clone(),
+                            );
+                        });
+
+                    parent
+                        .spawn(NodeBundle {
+                            style: Style {
+                                width: Val::Percent(100.),
+                                justify_self: JustifySelf::Center,
+                                justify_content: JustifyContent::SpaceEvenly,
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        })
+                        .with_children(|parent| {
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                slicer.clone(),
+                                icons.rankings_handle,
+                                icon_style.clone(),
+                                "排行榜",
+                                text_white_style.clone(),
+                            );
+                        });
+
+                    parent
+                        .spawn(NodeBundle {
+                            style: Style {
+                                width: Val::Percent(100.),
+                                justify_self: JustifySelf::Center,
+                                justify_content: JustifyContent::SpaceEvenly,
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        })
+                        .with_children(|parent| {
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                slicer.clone(),
+                                icons.badges_handle,
+                                icon_style.clone(),
+                                "徽章",
+                                text_white_style.clone(),
                             );
                         });
                 });
