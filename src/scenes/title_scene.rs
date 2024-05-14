@@ -4,6 +4,7 @@ use crate::{
         app_image::banners::{PixelDungeon, PixelDungeonSigns},
         AppResource,
     },
+    utils::ui::create_button,
 };
 use bevy::prelude::*;
 
@@ -15,10 +16,25 @@ pub struct TitleScene;
 #[derive(Component)]
 struct TitleSceneMark;
 
+#[derive(Component)]
+pub enum ButtonLabel {
+    EnterDungeon,
+    Badges,
+    Rankings,
+    Supporter,
+    News,
+    Changes,
+    Prefs,
+    About,
+}
+
 impl Scene for TitleScene {
     fn build(&self, app: &mut App) {
         app.add_scene_system::<TitleSceneMark, _>(SceneState::TitleScene, setup)
-            .add_systems(Update, check_status);
+            .add_systems(
+                Update,
+                check_interaction.run_if(in_state(SceneState::TitleScene)),
+            );
     }
 }
 
@@ -155,9 +171,10 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                                 parent,
                                 button_image.clone(),
                                 two_button_style.clone(),
+                                ButtonLabel::EnterDungeon,
                                 slicer.clone(),
-                                icons.enter_handle,
-                                icon_style.clone(),
+                                Some(icons.enter_handle),
+                                Some(icon_style.clone()),
                                 "进入地牢",
                                 text_white_style.clone(),
                             );
@@ -165,9 +182,10 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                                 parent,
                                 button_image.clone(),
                                 two_button_style.clone(),
+                                ButtonLabel::Supporter,
                                 slicer.clone(),
-                                icons.gold_handle,
-                                icon_style.clone(),
+                                Some(icons.gold_handle),
+                                Some(icon_style.clone()),
                                 "支持游戏开发",
                                 text_gold_style.clone(),
                             );
@@ -188,10 +206,35 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                                 parent,
                                 button_image.clone(),
                                 three_button_style.clone(),
+                                ButtonLabel::Rankings,
                                 slicer.clone(),
-                                icons.rankings_handle,
-                                icon_style.clone(),
+                                Some(icons.rankings_handle),
+                                Some(icon_style.clone()),
                                 "排行榜",
+                                text_white_style.clone(),
+                            );
+
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                ButtonLabel::News,
+                                slicer.clone(),
+                                Some(icons.news_handle),
+                                Some(icon_style.clone()),
+                                "游戏新闻",
+                                text_white_style.clone(),
+                            );
+
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                ButtonLabel::Prefs,
+                                slicer.clone(),
+                                Some(icons.prefs_handle),
+                                Some(icon_style.clone()),
+                                "设置",
                                 text_white_style.clone(),
                             );
                         });
@@ -211,10 +254,35 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                                 parent,
                                 button_image.clone(),
                                 three_button_style.clone(),
+                                ButtonLabel::Badges,
                                 slicer.clone(),
-                                icons.badges_handle,
-                                icon_style.clone(),
+                                Some(icons.badges_handle),
+                                Some(icon_style.clone()),
                                 "徽章",
+                                text_white_style.clone(),
+                            );
+
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                ButtonLabel::Changes,
+                                slicer.clone(),
+                                Some(icons.changes_handle),
+                                Some(icon_style.clone()),
+                                "改动",
+                                text_white_style.clone(),
+                            );
+
+                            create_button(
+                                parent,
+                                button_image.clone(),
+                                three_button_style.clone(),
+                                ButtonLabel::About,
+                                slicer.clone(),
+                                Some(icons.shpx_handle),
+                                Some(icon_style.clone()),
+                                "关于",
                                 text_white_style.clone(),
                             );
                         });
@@ -222,33 +290,24 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
         });
 }
 
-fn create_button(
-    parent: &mut ChildBuilder,
-    button_image: Handle<Image>,
-    button_style: Style,
-    slicer: TextureSlicer,
-    icon: Handle<Image>,
-    icon_style: Style,
-    text: &str,
-    text_style: TextStyle,
+fn check_interaction(
+    interaction_query: Query<(&Interaction, &ButtonLabel), Changed<Interaction>>,
+    mut scene_state: ResMut<NextState<SceneState>>,
 ) {
-    parent
-        .spawn((
-            ButtonBundle {
-                style: button_style,
-                image: UiImage::new(button_image),
-                ..Default::default()
-            },
-            ImageScaleMode::Sliced(slicer),
-        ))
-        .with_children(|parent| {
-            parent.spawn(ImageBundle {
-                image: UiImage::new(icon),
-                style: icon_style,
-                ..Default::default()
-            });
-            parent.spawn(TextBundle::from_section(text, text_style));
-        });
+    for (interaction, label) in interaction_query.iter() {
+        match label {
+            ButtonLabel::EnterDungeon => {
+                if *interaction == Interaction::Pressed {
+                    scene_state.set(SceneState::StartScene);
+                }
+            }
+            ButtonLabel::Badges => {}
+            ButtonLabel::Rankings => {}
+            ButtonLabel::Supporter => {}
+            ButtonLabel::News => {}
+            ButtonLabel::Changes => {}
+            ButtonLabel::Prefs => {}
+            ButtonLabel::About => {}
+        }
+    }
 }
-
-fn check_status() {}

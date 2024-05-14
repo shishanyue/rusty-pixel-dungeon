@@ -1,17 +1,17 @@
 
-pub struct SeedEngine{
+pub struct DungeonSeedEngine{
     rng:rand::rngs::StdRng,
 }
 
-impl Default for SeedEngine {
+impl Default for DungeonSeedEngine {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl SeedEngine {
+impl DungeonSeedEngine {
     pub fn new() -> Self{
-        SeedEngine{
+        DungeonSeedEngine{
             rng:rand::SeedableRng::seed_from_u64(5235235)
         }
     }

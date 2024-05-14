@@ -21,7 +21,7 @@ impl RoomProject for ZeroRoomProject {
 
     fn load<'a>(
         &mut self,
-        asset_server: Res<AssetServer>,
+        asset_server: &Res<AssetServer>,
         name: &str,
         path: impl Into<AssetPath<'a>>,
     ) {

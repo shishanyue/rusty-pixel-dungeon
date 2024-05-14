@@ -42,7 +42,8 @@ time = "0.3.36"
 crossbeam-channel = "0.5.12"
 image = "0.24.9"
 bevy_async_task = "0.1.1"
-
+seldom_state = "0.10.0"
+bevy_spritesheet_animation = "0.1.0"
 
 [profile.release]
 opt-level = 'z'

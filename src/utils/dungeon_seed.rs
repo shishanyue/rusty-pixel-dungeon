@@ -1,9 +1,9 @@
-pub struct Seed{
+pub struct DungeonSeed{
     seed_id:String,
     seed_num:u64
 }
 
-impl Seed {
+impl DungeonSeed {
     //解码
     //pub fn decode() -> Self{
 //

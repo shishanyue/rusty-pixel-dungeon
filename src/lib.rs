@@ -5,6 +5,7 @@ use custom::CustomPlugins;
 use level::LevelProjectPlugin;
 use room::RoomProjectPlugin;
 use scenes::ScenePlugin;
+use seldom_state::StateMachinePlugin;
 use system::SystemPlugin;
 
 pub mod actors;
@@ -21,7 +22,13 @@ pub struct RustyPixelDungeonPlugin;
 
 impl Plugin for RustyPixelDungeonPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((RustyPixelDungeonPlugins, CustomPlugins, DefaultTweenPlugins));
+        app.add_plugins((
+            RustyPixelDungeonPlugins,
+            CustomPlugins,
+            DefaultTweenPlugins,
+            StateMachinePlugin,
+            SpritesheetAnimationPlugin,
+        ));
     }
 }
 pub struct RustyPixelDungeonPlugins;
