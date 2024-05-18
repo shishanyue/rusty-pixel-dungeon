@@ -1,37 +1,33 @@
-use bevy::{asset::AssetPath, prelude::*};
-use bevy_ecs_ldtk::LdtkWorldBundle;
+use bevy::{prelude::*};
+use bevy_ecs_ldtk::{LevelSet};
 
-use super::{error::RoomError, RoomSize};
-
-pub trait RoomProject
+pub trait BasicRoomProject
 where
-    Self: Send + Sync + Default + Resource,
+    Self: Component + Default,
 {
-    type RoomProjectMark: Component;
-    //type RoomProjectBundle: Bundle;
-
-    fn build(&self, app: &mut App);
-
-    fn load<'a>(
-        &mut self,
-        asset_server: &Res<AssetServer>,
-        name: &str,
-        path: impl Into<AssetPath<'a>>,
-    );
-
+    type RoomProjectSize: Component + Clone + Copy;
+    fn get_level_set(&self, room_project_size: Self::RoomProjectSize) -> LevelSet;
     fn spawn(
         &self,
+        entity: &Entity,
+        level_set: &mut LevelSet,
+        project_size: Self::RoomProjectSize,
         commands: &mut Commands,
-        transform: Transform,
-        room_size: RoomSize,
-    ) -> Result<Entity, RoomError>;
-
-    fn get(
-        &self,
-        room_size: RoomSize,
-    ) -> Result<(Self::RoomProjectMark, LdtkWorldBundle), RoomError>;
-
-    //fn get(&self,transform: Transform) -> RoomProjectBundle;
+        asset_server: &Res<AssetServer>,
+    );
 }
 
-pub type RoomName = String;
+#[derive(Bundle, Default)]
+pub struct RoomProjectBundle<T>
+where
+    T: 'static + BasicRoomProject + Default,
+{
+    pub transform: Transform,
+    pub global_transform: GlobalTransform,
+    pub visibility: Visibility,
+    pub inherited_visibility: InheritedVisibility,
+    pub view_visibility: ViewVisibility,
+    pub level_set: LevelSet,
+    pub room_project_size: T::RoomProjectSize,
+    pub room_project_type: T,
+}

@@ -4,10 +4,10 @@ use crate::bevy_ext::AppExt;
 
 use self::{home_scene::HomeScene, start_scene::StartScene, title_scene::TitleScene, welcome_scene::WelcomeScene};
 
-mod title_scene;
-mod welcome_scene;
-mod home_scene;
-mod start_scene;
+pub mod title_scene;
+pub mod welcome_scene;
+pub mod home_scene;
+pub mod start_scene;
 
 pub trait Scene: Default {
     fn build(&self, app: &mut App);

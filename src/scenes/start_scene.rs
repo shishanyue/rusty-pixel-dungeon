@@ -1,6 +1,6 @@
 use crate::{bevy_ext::AppExt, custom::resource::AppResource, utils::ui::create_button};
 use bevy::prelude::*;
-
+use serde::{Deserialize, Serialize};
 use super::{Scene, SceneState};
 
 #[derive(Default)]
@@ -9,7 +9,8 @@ pub struct StartScene;
 #[derive(Component)]
 struct StartSceneMark;
 
-#[derive(Component)]
+#[derive(Debug, Component, Reflect, Serialize, Deserialize)]
+#[reflect(Component, Serialize, Deserialize)]
 pub enum ButtonLabel {
     SinglePlayer,
     MultiPlayer,

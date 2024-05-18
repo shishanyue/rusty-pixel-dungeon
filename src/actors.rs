@@ -1,3 +1,4 @@
+pub mod hero;
 use bevy::prelude::*;
 
 pub struct ActorPlugin;

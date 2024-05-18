@@ -1,4 +1,6 @@
+use bevy::prelude::*;
 
+#[derive(Resource)]
 pub struct DungeonSeedEngine{
     rng:rand::rngs::StdRng,
 }

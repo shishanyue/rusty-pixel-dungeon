@@ -1,8 +1,6 @@
 use super::{Scene, SceneState};
 use crate::{
-    bevy_ext::AppExt,
-    custom::resource::AppResource,
-    room::{home_room::HomeRoomProject, room_project::RoomProject, RoomSize},
+    bevy_ext::AppExt, room::{ home_room::{HomeRoomPojectSize, HomeRoomProject}, room_project::RoomProjectBundle},
 };
 use bevy::prelude::*;
 
@@ -18,10 +16,9 @@ impl Scene for HomeScene {
     }
 }
 
-fn setup(mut commands: Commands, home_room_project: Res<HomeRoomProject>) {
-    home_room_project.spawn(
-        &mut commands,
-        Transform::from_xyz(10., 10., 10.),
-        RoomSize::Medium,
-    ).unwrap();
+fn setup(mut commands: Commands) {
+    commands.spawn(RoomProjectBundle::<HomeRoomProject>{
+        room_project_size: HomeRoomPojectSize::Medium,
+        ..Default::default()
+    });
 }

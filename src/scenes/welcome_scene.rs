@@ -38,7 +38,7 @@ fn setup(mut commands: Commands) {
 }
 
 fn check_status(mut scene_state: ResMut<NextState<SceneState>>, system_status: Res<SystemStatus>) {
-    if system_status.inited_assets && system_status.inited_rooms {
+    if system_status.inited_assets {
         scene_state.set(SceneState::TitleScene);
     }
 }

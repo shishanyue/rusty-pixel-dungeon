@@ -1,5 +1,7 @@
+use actors::hero::{HeroBundle, HeroType};
 use bevy::app::{App, Plugin, PluginGroup, PluginGroupBuilder};
-use bevy_ecs_ldtk::LdtkPlugin;
+use bevy_ecs_ldtk::{app::LdtkEntityAppExt, LdtkPlugin};
+use bevy_spritesheet_animation::plugin::SpritesheetAnimationPlugin;
 use bevy_tween::DefaultTweenPlugins;
 use custom::CustomPlugins;
 use level::LevelProjectPlugin;
@@ -28,7 +30,13 @@ impl Plugin for RustyPixelDungeonPlugin {
             DefaultTweenPlugins,
             StateMachinePlugin,
             SpritesheetAnimationPlugin,
-        ));
+        ))
+        .register_type::<actors::hero::HeroType>()
+        .register_type::<room::home_room::HomeRoomPojectSize>()
+        .register_type::<scenes::start_scene::ButtonLabel>()
+        .register_type::<scenes::title_scene::ButtonLabel>()
+        .register_default_ldtk_entity_for_layer::<HeroBundle>("Hero")
+        .register_type::<HeroType>();
     }
 }
 pub struct RustyPixelDungeonPlugins;

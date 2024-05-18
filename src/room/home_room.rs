@@ -1,75 +1,36 @@
+use bevy::{prelude::*};
+use bevy_ecs_ldtk::{assets::LdtkProject, LevelSet};
+use serde::{Deserialize, Serialize};
 
-use bevy::{asset::AssetPath, prelude::*};
-use bevy_ecs_ldtk::{assets::LdtkProject, LdtkWorldBundle, LevelSet};
+use super::room_project::BasicRoomProject;
 
-use super::{error::RoomError, room_project::RoomProject, RoomSize};
-
-pub const MEDIUM_SIZE: [&str; 1] = ["3297cf52-fec0-11ee-906e-e9e1ced38237"];
-
-#[derive(Default, Resource)]
-pub struct HomeRoomProject {
-    name: String,
-    room_hanle: Handle<LdtkProject>,
+#[derive(Debug, Default, Component, Reflect, Serialize, Deserialize,Clone, Copy)]
+#[reflect(Component, Serialize, Deserialize)]
+pub enum HomeRoomPojectSize {
+    #[default]
+    Medium,
 }
 
-#[derive(Component)]
-pub struct HomeRoomlMark;
+#[derive(Component, Default)]
+pub struct HomeRoomProject;
 
-impl RoomProject for HomeRoomProject {
-    type RoomProjectMark = HomeRoomlMark;
-
-    fn build(&self, _: &mut App) {}
-
-    fn load<'a>(
-        &mut self,
-        asset_server: &Res<AssetServer>,
-        name: &str,
-        path: impl Into<AssetPath<'a>>,
-    ) {
-        self.name = name.to_string();
-        self.room_hanle = asset_server.load(path);
+impl BasicRoomProject for HomeRoomProject {
+    type RoomProjectSize = HomeRoomPojectSize;
+    fn get_level_set(&self, _: Self::RoomProjectSize) -> LevelSet {
+        LevelSet::from_iids(["3297cf52-fec0-11ee-906e-e9e1ced38237"])
     }
-
     fn spawn(
         &self,
+        entity: &Entity,
+        level_set:&mut LevelSet,
+        project_size:Self::RoomProjectSize,
         commands: &mut Commands,
-        transform: Transform,
-        room_size: RoomSize,
-    ) -> Result<Entity, RoomError> {
-        let level_set = match room_size {
-            RoomSize::Medium => LevelSet::from_iids(MEDIUM_SIZE),
-            _ => return Err(RoomError::NoSuchSize(room_size)),
-        };
-
-        Ok(commands
-            .spawn((
-                HomeRoomlMark,
-                LdtkWorldBundle {
-                    ldtk_handle: self.room_hanle.clone(),
-                    level_set,
-                    transform,
-                    ..Default::default()
-                },
-            ))
-            .id())
-    }
-
-    fn get(
-        &self,
-        room_size: RoomSize,
-    ) -> Result<(Self::RoomProjectMark, LdtkWorldBundle), RoomError> {
-        let level_set = match room_size {
-            RoomSize::Medium => LevelSet::from_iids(MEDIUM_SIZE),
-            _ => return Err(RoomError::NoSuchSize(room_size)),
-        };
-
-        Ok((
-            HomeRoomlMark,
-            LdtkWorldBundle {
-                ldtk_handle: self.room_hanle.clone(),
-                level_set,
-                ..Default::default()
-            },
-        ))
+        asset_server: &Res<AssetServer>,
+    ) {
+        *level_set = self.get_level_set(project_size);
+        commands
+            .get_entity(*entity)
+            .unwrap()
+            .insert(asset_server.load::<LdtkProject>("environment/rooms/home_room.ldtk"));
     }
 }

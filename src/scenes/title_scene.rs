@@ -7,7 +7,7 @@ use crate::{
     utils::ui::create_button,
 };
 use bevy::prelude::*;
-
+use serde::{Deserialize, Serialize};
 use super::{Scene, SceneState};
 
 #[derive(Default)]
@@ -16,7 +16,9 @@ pub struct TitleScene;
 #[derive(Component)]
 struct TitleSceneMark;
 
-#[derive(Component)]
+
+#[derive(Debug, Component, Reflect, Serialize, Deserialize)]
+#[reflect(Component, Serialize, Deserialize)]
 pub enum ButtonLabel {
     EnterDungeon,
     Badges,
