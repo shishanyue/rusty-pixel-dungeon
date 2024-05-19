@@ -55,6 +55,7 @@ pub fn init_app_res(
     );
 
     app_res.app_font = app_assets_handles.app_font.clone();
+    app_res.app_image.splashes = app_assets_handles.app_image.splashes.clone();
 
     system_status.inited_assets = true;
 }

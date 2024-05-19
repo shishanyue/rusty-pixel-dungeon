@@ -6,7 +6,7 @@ where
     Self: Component + Default,
 {
     type RoomProjectSize: Component + Clone + Copy;
-    fn get_level_set(&self, room_project_size: Self::RoomProjectSize) -> LevelSet;
+    fn get_level_set(room_project_size: Self::RoomProjectSize) -> LevelSet;
     fn spawn(
         &self,
         entity: &Entity,

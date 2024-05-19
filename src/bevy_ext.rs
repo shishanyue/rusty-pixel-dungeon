@@ -1,11 +1,14 @@
+pub mod condition;
 pub mod error;
-
 use bevy::prelude::*;
 
 use crate::{
+    panel::{Panel, PanelState},
     scenes::{Scene, SceneState},
     utils::despawn_screen,
 };
+
+use self::condition::pressed_button;
 
 pub trait AppExt {
     fn init_scene<T: Scene>(&mut self) -> &mut Self;
@@ -14,10 +17,20 @@ pub trait AppExt {
         states: SceneState,
         systems: impl IntoSystemConfigs<M>,
     ) -> &mut Self;
+    fn init_panel<T: Panel>(&mut self) -> &mut Self;
+    fn add_panel_system<T: Component, M>(
+        &mut self,
+        states: PanelState,
+        systems: impl IntoSystemConfigs<M>,
+    ) -> &mut Self;
 }
 
 impl AppExt for App {
     fn init_scene<T: Scene>(&mut self) -> &mut Self {
+        T::default().build(self);
+        self
+    }
+    fn init_panel<T: Panel>(&mut self) -> &mut Self {
         T::default().build(self);
         self
     }
@@ -29,6 +42,24 @@ impl AppExt for App {
     ) -> &mut Self {
         self.add_systems(OnEnter(states), systems)
             .add_systems(OnExit(states), despawn_screen::<T>)
+    }
+
+    fn add_panel_system<T: Component, M>(
+        &mut self,
+        states: PanelState,
+        systems: impl IntoSystemConfigs<M>,
+    ) -> &mut Self {
+        self.add_systems(OnEnter(states), systems)
+            .add_systems(OnExit(states), despawn_screen::<T>)
+            .add_systems(
+                Update,
+                (
+                    despawn_screen::<T>,
+                    |mut panel_state: ResMut<NextState<PanelState>>,| {
+                        panel_state.set(PanelState::None);
+                    },
+                ).run_if(pressed_button(KeyCode::Escape)),
+            )
     }
 }
 
@@ -52,5 +83,3 @@ pub fn add_atlas_by_rect(
             .add_texture(rect),
     }
 }
-
-

@@ -15,12 +15,13 @@ semicolon_if_nothing_returned = "warn"
 too_many_arguments = "allow"
 ptr_as_ptr = "warn"
 ptr_cast_constness = "warn"
+
 [workspace.lints.rust]
 unsafe_op_in_unsafe_fn = "warn"
 missing_docs = "allow"
 
 [workspace]
-members = [ "crates/*"]
+members = ["crates/*"]
 
 [lints]
 workspace = true
@@ -36,7 +37,8 @@ leafwing-input-manager = "0.13.3"
 bevy-inspector-egui = "0.24.0"
 toml = "0.8.12"
 bevy_kira_audio = "0.19.0"
-bevy_ecs_ldtk ={ path = "./crates/bevy_ecs_ldtk/"}
+bevy_ecs_ldtk = { path = "./crates/bevy_ecs_ldtk/" }
+rusty_pixel_dungeon_server = { path = "./crates/rusty_pixel_dungeon_server/" }
 rand = "0.8.5"
 time = "0.3.36"
 crossbeam-channel = "0.5.12"
@@ -44,6 +46,9 @@ image = "0.24.9"
 bevy_async_task = "0.1.1"
 seldom_state = "0.10.0"
 bevy_spritesheet_animation = "0.1.0"
+bevy_mod_picking = { version = "0.18.2" }
+bevy_replicon = "0.25.2"
+bevy_replicon_renet = "0.2.0"
 
 [profile.release]
 opt-level = 'z'
@@ -72,7 +77,8 @@ features = [
     "default_font",
     "tonemapping_luts",
     "multi-threaded",
-    "dynamic_linking"
+    "dynamic_linking",
+    "bevy_pbr",
 ]
 
 
@@ -83,4 +89,3 @@ opt-level = 1
 # Enable high optimizations for dependencies (incl. Bevy), but not for our code:
 [profile.dev.package."*"]
 opt-level = 3
-

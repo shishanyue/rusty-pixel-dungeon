@@ -16,7 +16,7 @@ pub struct HomeRoomProject;
 
 impl BasicRoomProject for HomeRoomProject {
     type RoomProjectSize = HomeRoomPojectSize;
-    fn get_level_set(&self, _: Self::RoomProjectSize) -> LevelSet {
+    fn get_level_set(_: Self::RoomProjectSize) -> LevelSet {
         LevelSet::from_iids(["3297cf52-fec0-11ee-906e-e9e1ced38237"])
     }
     fn spawn(
@@ -27,7 +27,7 @@ impl BasicRoomProject for HomeRoomProject {
         commands: &mut Commands,
         asset_server: &Res<AssetServer>,
     ) {
-        *level_set = self.get_level_set(project_size);
+        *level_set = Self::get_level_set(project_size);
         commands
             .get_entity(*entity)
             .unwrap()

@@ -2,16 +2,19 @@ use std::str::FromStr;
 
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
-use thiserror::Error;
+use bevy_mod_picking::prelude::*;
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 pub static HERO_IDENTIFIER: [&str; 5] = ["Duelist", "Huntress", "Rogue", "Warrior", "Mage"];
+
+pub type SelectedHeroType = HeroType;
+
 /// This enum mirrors an equivalent enum in the `LDtk` project called "Equipment".
-#[derive(Debug, Default, Component, Reflect, Serialize, Deserialize)]
+#[derive(Debug, Default, Component, Reflect, Serialize, Deserialize, Resource,Clone, Copy)]
 #[reflect(Component, Serialize, Deserialize)]
 pub enum HeroType {
     #[default]
-    Unknown,
     Duelist,
     Huntress,
     Rogue,
@@ -62,4 +65,5 @@ pub struct HeroBundle {
     grid_coords: GridCoords,
     #[with(HeroType::from_field)]
     pub hero_type: HeroType,
+    pub pickable: PickableBundle,
 }

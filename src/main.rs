@@ -4,7 +4,6 @@ use rusty_pixel_dungeon::RustyPixelDungeonPlugin;
 
 fn main() {
     let mut app = App::new();
-
     app.add_plugins(
         DefaultPlugins
             .set(WindowPlugin {

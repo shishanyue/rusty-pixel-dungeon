@@ -6,9 +6,14 @@ use bevy::prelude::*;
 
 use self::{app_assets_path::AppAssetsPath, dynamic_image::DynamicImage};
 
-use super::{handle::{app_font::AppFontHandle, app_image::AppImageHandle, assets_path::{check_assets_path_ready, load_assets_path, AppAssetsPathHandle}}, resource::init_app_res};
-
-
+use super::{
+    handle::{
+        app_font::AppFontHandle,
+        app_image::{splashes::SplashesHandles, AppImageHandle},
+        assets_path::{check_assets_path_ready, load_assets_path, AppAssetsPathHandle},
+    },
+    resource::init_app_res,
+};
 
 #[derive(States, Clone, Copy, Default, Eq, PartialEq, Hash, Debug)]
 pub enum AppAssetsState {
@@ -23,7 +28,6 @@ pub enum AppAssetsState {
 pub struct AppAssetsHandles {
     pub app_image: AppImageHandle,
     pub app_font: AppFontHandle,
-
 }
 
 pub struct CustomAssetsPlugin;
@@ -59,6 +63,13 @@ fn load_assets(
             banners: asset_server.load(&app_assets_path.image.banners),
             chrome: asset_server.load(&app_assets_path.image.chrome),
             icons: asset_server.load(&app_assets_path.image.icons),
+            splashes: SplashesHandles {
+                duelist: asset_server.load(&app_assets_path.image.splashes.duelist),
+                huntress: asset_server.load(&app_assets_path.image.splashes.huntress),
+                mage: asset_server.load(&app_assets_path.image.splashes.mage),
+                rogue: asset_server.load(&app_assets_path.image.splashes.rogue),
+                warrior: asset_server.load(&app_assets_path.image.splashes.warrior),
+            },
         },
 
         app_font: AppFontHandle {
@@ -79,7 +90,7 @@ fn check_assets_ready(
     app_assets_handles: Res<AppAssetsHandles>,
     mut assets_state: ResMut<NextState<AppAssetsState>>,
 ) {
-    if     asset_server.is_loaded_with_dependencies(&app_assets_handles.app_image.banners)
+    if asset_server.is_loaded_with_dependencies(&app_assets_handles.app_image.banners)
         && asset_server.is_loaded_with_dependencies(&app_assets_handles.app_image.chrome)
         && asset_server.is_loaded_with_dependencies(&app_assets_handles.app_image.icons)
         && asset_server.is_loaded_with_dependencies(&app_assets_handles.app_font.bold)

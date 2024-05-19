@@ -1,15 +1,21 @@
-use actors::hero::{HeroBundle, HeroType};
+use actors::{hero::{HeroBundle, HeroType}, ActorPlugin};
 use bevy::app::{App, Plugin, PluginGroup, PluginGroupBuilder};
 use bevy_ecs_ldtk::{app::LdtkEntityAppExt, LdtkPlugin};
+use bevy_mod_picking::prelude::*;
+use bevy_replicon::RepliconPlugins;
+use bevy_replicon_renet::RepliconRenetPlugins;
 use bevy_spritesheet_animation::plugin::SpritesheetAnimationPlugin;
 use bevy_tween::DefaultTweenPlugins;
+use client::plugin::RustyPixelDungeonClientPlugin;
 use custom::CustomPlugins;
 use level::LevelProjectPlugin;
+use panel::PanelPlugin;
 use room::RoomProjectPlugin;
+use rusty_pixel_dungeon_server::RustyPixelDungeonServerPlugin;
 use scenes::ScenePlugin;
 use seldom_state::StateMachinePlugin;
 use system::SystemPlugin;
-
+pub mod client;
 pub mod actors;
 pub mod bevy_ext;
 pub mod custom;
@@ -30,7 +36,13 @@ impl Plugin for RustyPixelDungeonPlugin {
             DefaultTweenPlugins,
             StateMachinePlugin,
             SpritesheetAnimationPlugin,
+            DefaultPickingPlugins,
+            RepliconPlugins,
+            RepliconRenetPlugins,
+            RustyPixelDungeonClientPlugin,
+            RustyPixelDungeonServerPlugin
         ))
+        .insert_resource(DebugPickingMode::Normal)
         .register_type::<actors::hero::HeroType>()
         .register_type::<room::home_room::HomeRoomPojectSize>()
         .register_type::<scenes::start_scene::ButtonLabel>()
@@ -49,7 +61,9 @@ impl PluginGroup for RustyPixelDungeonPlugins {
             .add(RoomProjectPlugin)
             .add(LevelProjectPlugin)
             .add(ScenePlugin)
-            .add(SystemPlugin);
+            .add(PanelPlugin)
+            .add(SystemPlugin)
+            .add(ActorPlugin);
         group
     }
 }

@@ -1,7 +1,9 @@
-use crate::{bevy_ext::AppExt, custom::resource::AppResource, utils::ui::create_button};
-use bevy::prelude::*;
-use serde::{Deserialize, Serialize};
 use super::{Scene, SceneState};
+use crate::{bevy_ext::AppExt, client::RustyPixelDungeonClient, custom::resource::AppResource, utils::ui::create_button};
+use bevy::prelude::*;
+use bevy_replicon::core::replicon_channels::RepliconChannels;
+use rusty_pixel_dungeon_server::server::{event::RustyPixelDungeonNetEvent, RustyPixelDungeonServer};
+use serde::{Deserialize, Serialize};
 
 #[derive(Default)]
 pub struct StartScene;
@@ -92,17 +94,24 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
 }
 
 fn check_interaction(
+    mut commands:Commands,
     interaction_query: Query<(&Interaction, &ButtonLabel), Changed<Interaction>>,
     mut scene_state: ResMut<NextState<SceneState>>,
+    server: Res<RustyPixelDungeonServer>,
+    client: Res<RustyPixelDungeonClient>,
+    channels: Res<RepliconChannels>,
+    mut net_evnet: EventWriter<RustyPixelDungeonNetEvent>,
 ) {
     for (interaction, label) in interaction_query.iter() {
-        match label {
-            ButtonLabel::SinglePlayer => {
-                if *interaction == Interaction::Pressed {
+        if interaction == &Interaction::Pressed {
+            match label {
+                ButtonLabel::SinglePlayer => {
+                    server.init_server(&mut commands, &channels).unwrap();
+                    client.init_client(&mut commands, &channels).unwrap();
                     scene_state.set(SceneState::HomeScene);
                 }
-            },
-            ButtonLabel::MultiPlayer => {},
+                ButtonLabel::MultiPlayer => {}
+            }
         }
     }
 }

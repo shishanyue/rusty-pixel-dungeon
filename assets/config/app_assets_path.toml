@@ -2,6 +2,12 @@
 banners = "interfaces/banners.png"
 chrome = "interfaces/chrome.png"
 icons = "interfaces/icons.png"
+[image.splashes]
+duelist = "splashes/duelist.jpg"
+huntress = "splashes/huntress.jpg"
+mage = "splashes/mage.jpg"
+rogue = "splashes/rogue.jpg"
+warrior = "splashes/warrior.jpg"
 [font]
 bold = "fonts/SourceHanSansCN-Bold.otf"
 extra_light = "fonts/SourceHanSansCN-ExtraLight.otf"

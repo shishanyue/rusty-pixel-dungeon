@@ -14,13 +14,23 @@ pub struct FontsPath {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SplashesPath {
+    pub duelist: String,
+    pub huntress: String,
+    pub mage: String,
+    pub rogue: String,
+    pub warrior: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ImagesPath {
     pub banners: String,
     pub chrome: String,
-    pub icons: String
+    pub icons: String,
+    pub splashes: SplashesPath,
 }
 
-#[derive(Asset, TypePath, Debug, Serialize, Deserialize, Clone)]
+#[derive(Asset, TypePath, Debug, Serialize, Deserialize, Clone,Default)]
 pub struct AppAssetsPath {
     pub image: ImagesPath,
     pub font: FontsPath,
@@ -40,12 +50,25 @@ impl Default for FontsPath {
         }
     }
 }
+
+impl Default for SplashesPath {
+    fn default() -> Self {
+        Self {
+            duelist: "splashes/duelist.jpg".to_string(),
+            huntress: "splashes/huntress.jpg".to_string(),
+            mage: "splashes/mage.jpg".to_string(),
+            rogue: "splashes/rogue.jpg".to_string(),
+            warrior: "splashes/warrior.jpg".to_string(),
+        }
+    }
+}
 impl Default for ImagesPath {
     fn default() -> Self {
         Self {
             banners: "interfaces/banners.png".to_string(),
             chrome: "interfaces/chrome.png".to_string(),
             icons: "interfaces/icons.png".to_string(),
+            splashes: SplashesPath::default()
         }
     }
 }

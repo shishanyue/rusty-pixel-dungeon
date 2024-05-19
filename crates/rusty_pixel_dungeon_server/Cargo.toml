@@ -1,0 +1,17 @@
+[package]
+name = "rusty_pixel_dungeon_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1.0.198"
+thiserror = "1.0.58"
+bevy_replicon = "0.25.2"
+bevy_replicon_renet = "0.2.0"
+[dependencies.bevy]
+version = "0.13.2"
+# Disable the default features if there are any that you do not want
+default-features = false
+
+[lints]
+workspace = true

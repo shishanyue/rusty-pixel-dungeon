@@ -20,7 +20,7 @@ pub enum SceneState {
     WelcomeScene,
     TitleScene,
     HomeScene,
-    StartScene
+    StartScene,
 }
 
 pub struct ScenePlugin;
