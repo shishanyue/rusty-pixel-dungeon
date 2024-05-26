@@ -1,8 +1,20 @@
 use super::{Scene, SceneState};
-use crate::{bevy_ext::AppExt, client::RustyPixelDungeonClient, custom::resource::AppResource, utils::ui::create_button};
+use crate::{
+    bevy_ext::AppExt,
+    client::RustyPixelDungeonClient,
+    custom::resource::AppResource,
+    utils::{
+        toast::{ToastMessage, ToastStyle},
+        ui::create_button,
+    },
+};
 use bevy::prelude::*;
 use bevy_replicon::core::replicon_channels::RepliconChannels;
-use rusty_pixel_dungeon_server::server::{event::RustyPixelDungeonNetEvent, RustyPixelDungeonServer};
+use rusty_pixel_dungeon_server::server::{
+    event::{RoomConfig, RustyPixelDungeonClientNetEvent as NetEvent, Version},
+    RustyPixelDungeonServer,
+};
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Default)]
@@ -94,20 +106,30 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
 }
 
 fn check_interaction(
-    mut commands:Commands,
+    mut commands: Commands,
     interaction_query: Query<(&Interaction, &ButtonLabel), Changed<Interaction>>,
     mut scene_state: ResMut<NextState<SceneState>>,
     server: Res<RustyPixelDungeonServer>,
     client: Res<RustyPixelDungeonClient>,
     channels: Res<RepliconChannels>,
-    mut net_evnet: EventWriter<RustyPixelDungeonNetEvent>,
+    mut net_evnet: EventWriter<NetEvent>,
+    mut toast_evnet: EventWriter<ToastMessage>,
 ) {
     for (interaction, label) in interaction_query.iter() {
         if interaction == &Interaction::Pressed {
             match label {
                 ButtonLabel::SinglePlayer => {
+                    toast_evnet.send(ToastMessage::new("正在启动本地服务器", ToastStyle::Normal));
                     server.init_server(&mut commands, &channels).unwrap();
                     client.init_client(&mut commands, &channels).unwrap();
+
+                    net_evnet.send(NetEvent::NewRoom(RoomConfig {
+                        is_public: false,
+                        max_player: 10,
+                        password: "".to_string(),
+                        version: Version::V001,
+                    }));
+
                     scene_state.set(SceneState::HomeScene);
                 }
                 ButtonLabel::MultiPlayer => {}

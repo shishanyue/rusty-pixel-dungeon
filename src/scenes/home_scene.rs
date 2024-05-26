@@ -1,6 +1,6 @@
 use super::{Scene, SceneState};
 use crate::{
-    actors::hero::{HeroType, SelectedHeroType},
+    actors::hero::{ActiveHero, HeroType, SelectedHero, SelectedHeroEntity},
     bevy_ext::AppExt,
     panel::PanelState,
     room::{
@@ -21,9 +21,9 @@ impl Scene for HomeScene {
         app.add_scene_system::<HomeSceneMark, _>(SceneState::HomeScene, setup)
             .add_systems(
                 Update,
-                check_interaction
-                    .run_if(in_state(SceneState::HomeScene))
-                    .run_if(in_state(PanelState::None)),
+                check_interaction.run_if(not(any_with_component::<ActiveHero>).and_then(
+                    in_state(SceneState::HomeScene).and_then(in_state(PanelState::None)),
+                )),
             );
     }
 }
@@ -38,15 +38,17 @@ fn setup(mut commands: Commands) {
     ));
 }
 fn check_interaction(
-    interaction_query: Query<(&PickingInteraction, &HeroType), Changed<PickingInteraction>>,
-    mut selected_hero_type: ResMut<SelectedHeroType>,
+    mut commands: Commands,
+    interaction_query: Query<(Entity, &PickingInteraction, &HeroType), Changed<PickingInteraction>>,
+    mut selected_hero_type: ResMut<SelectedHero>,
     mut panel_state: ResMut<NextState<PanelState>>,
 ) {
-    for (interaction, hero_type) in interaction_query.iter() {
+    for (entity, interaction, hero_type) in interaction_query.iter() {
         match interaction {
             PickingInteraction::Pressed => {
-                *selected_hero_type = *hero_type;
+                *selected_hero_type = SelectedHero::Unlocked(*hero_type);
                 panel_state.set(PanelState::HeroViewPanel);
+                commands.insert_resource(SelectedHeroEntity { entity });
                 info!("{:?}  {:?}", interaction, hero_type);
             }
             PickingInteraction::Hovered => {}

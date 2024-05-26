@@ -7,6 +7,8 @@ use crate::custom::{assets::{dynamic_image::DynamicImage, AppAssetsHandles}, res
 pub struct ChromeResource {
     pub grey_button_tr_handle: Handle<Image>,
     pub grey_button_tr_slicer: TextureSlicer,
+    pub window_handle:Handle<Image>,
+    pub window_slicer:TextureSlicer,
 }
 
 impl ChromeResource {
@@ -20,14 +22,22 @@ impl ChromeResource {
 
         let chrome_image = dynamic_images.get(texture_handle.clone()).unwrap();
         let grey_button_tr_image = chrome_image.uv_by_rect(20, 9, 9, 9);
-
+        let window_image = chrome_image.uv_by_rect(0, 0, 20, 20);
+        
         app_res.app_image.chrome.grey_button_tr_handle = images.add(grey_button_tr_image.to_image());
+        app_res.app_image.chrome.window_handle = images.add(window_image.to_image());
 
         app_res.app_image.chrome.grey_button_tr_slicer = TextureSlicer {
             border: BorderRect::square(4.0),
             center_scale_mode: SliceScaleMode::Stretch,
             sides_scale_mode: SliceScaleMode::Stretch,
             max_corner_scale: 3.0,
+        };
+        app_res.app_image.chrome.window_slicer = TextureSlicer {
+            border: BorderRect::square(6.0),
+            center_scale_mode: SliceScaleMode::Stretch,
+            sides_scale_mode: SliceScaleMode::Stretch,
+            max_corner_scale: 2.0,
         };
     }
 }

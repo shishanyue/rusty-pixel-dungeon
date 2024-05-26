@@ -8,10 +8,19 @@ use thiserror::Error;
 
 pub static HERO_IDENTIFIER: [&str; 5] = ["Duelist", "Huntress", "Rogue", "Warrior", "Mage"];
 
-pub type SelectedHeroType = HeroType;
+#[derive(Resource)]
+pub enum SelectedHero {
+    Unlocked(HeroType),
+}
+
+
+#[derive(Resource)]
+pub struct SelectedHeroEntity {
+    pub entity: Entity,
+}
 
 /// This enum mirrors an equivalent enum in the `LDtk` project called "Equipment".
-#[derive(Debug, Default, Component, Reflect, Serialize, Deserialize, Resource,Clone, Copy)]
+#[derive(Debug, Default, Component, Reflect, Serialize, Deserialize, Resource, Clone, Copy)]
 #[reflect(Component, Serialize, Deserialize)]
 pub enum HeroType {
     #[default]
@@ -21,6 +30,9 @@ pub enum HeroType {
     Warrior,
     Mage,
 }
+
+#[derive(Component, Debug)]
+pub struct ActiveHero;
 
 impl HeroType {
     pub fn from_field(entity_instance: &EntityInstance) -> Self {

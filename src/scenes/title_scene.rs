@@ -150,7 +150,6 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                     style: Style {
                         width: Val::Percent(80.),
                         height: Val::Percent(100.),
-                        justify_self: JustifySelf::Center,
                         justify_content: JustifyContent::SpaceEvenly,
                         flex_direction: FlexDirection::Column,
                         ..Default::default()
@@ -162,7 +161,6 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                         .spawn(NodeBundle {
                             style: Style {
                                 width: Val::Percent(100.),
-                                justify_self: JustifySelf::Center,
                                 justify_content: JustifyContent::SpaceEvenly,
                                 ..Default::default()
                             },
@@ -197,7 +195,6 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                         .spawn(NodeBundle {
                             style: Style {
                                 width: Val::Percent(100.),
-                                justify_self: JustifySelf::Center,
                                 justify_content: JustifyContent::SpaceEvenly,
                                 ..Default::default()
                             },
@@ -245,7 +242,6 @@ fn setup(mut commands: Commands, app_res: Res<AppResource>) {
                         .spawn(NodeBundle {
                             style: Style {
                                 width: Val::Percent(100.),
-                                justify_self: JustifySelf::Center,
                                 justify_content: JustifyContent::SpaceEvenly,
                                 ..Default::default()
                             },

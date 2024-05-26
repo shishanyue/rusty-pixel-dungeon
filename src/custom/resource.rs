@@ -2,7 +2,7 @@ pub mod app_image;
 
 use bevy::prelude::*;
 
-use crate::system::SystemStatus;
+use crate::states::system::SystemStatus;
 
 use self::app_image::{
     banners::BannersResource, chrome::ChromeResource, icons::IconsResource, AppImageResource,

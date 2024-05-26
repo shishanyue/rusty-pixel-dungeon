@@ -5,7 +5,7 @@ use bevy_mod_picking::prelude::*;
 use bevy_replicon::RepliconPlugins;
 use bevy_replicon_renet::RepliconRenetPlugins;
 use bevy_spritesheet_animation::plugin::SpritesheetAnimationPlugin;
-use bevy_tween::DefaultTweenPlugins;
+use bevy_tweening::*;
 use client::plugin::RustyPixelDungeonClientPlugin;
 use custom::CustomPlugins;
 use level::LevelProjectPlugin;
@@ -14,7 +14,8 @@ use room::RoomProjectPlugin;
 use rusty_pixel_dungeon_server::RustyPixelDungeonServerPlugin;
 use scenes::ScenePlugin;
 use seldom_state::StateMachinePlugin;
-use system::SystemPlugin;
+use states::StatesPlugin;
+use utils::toast::ToastPlugin;
 pub mod client;
 pub mod actors;
 pub mod bevy_ext;
@@ -23,24 +24,22 @@ pub mod level;
 pub mod panel;
 pub mod room;
 pub mod scenes;
-pub mod system;
 pub mod utils;
+pub mod states;
 
 pub struct RustyPixelDungeonPlugin;
 
 impl Plugin for RustyPixelDungeonPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            RustyPixelDungeonPlugins,
             CustomPlugins,
-            DefaultTweenPlugins,
+            TweeningPlugin,
             StateMachinePlugin,
             SpritesheetAnimationPlugin,
             DefaultPickingPlugins,
             RepliconPlugins,
             RepliconRenetPlugins,
-            RustyPixelDungeonClientPlugin,
-            RustyPixelDungeonServerPlugin
+            RustyPixelDungeonPlugins,
         ))
         .insert_resource(DebugPickingMode::Normal)
         .register_type::<actors::hero::HeroType>()
@@ -62,8 +61,11 @@ impl PluginGroup for RustyPixelDungeonPlugins {
             .add(LevelProjectPlugin)
             .add(ScenePlugin)
             .add(PanelPlugin)
-            .add(SystemPlugin)
-            .add(ActorPlugin);
+            .add(StatesPlugin)
+            .add(ActorPlugin)
+            .add(ToastPlugin)
+            .add(RustyPixelDungeonClientPlugin)
+            .add(RustyPixelDungeonServerPlugin);
         group
     }
 }

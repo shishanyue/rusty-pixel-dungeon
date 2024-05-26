@@ -1,4 +1,7 @@
-use crate::{bevy_ext::AppExt, system::SystemStatus};
+use crate::{
+    bevy_ext::{condition::run_once_in_state, AppExt},
+    states::system::{SystemState, SystemStatus},
+};
 
 use bevy::prelude::*;
 
@@ -15,7 +18,10 @@ impl Scene for WelcomeScene {
         app.add_scene_system::<WelcomeSceneMark, _>(SceneState::WelcomeScene, setup)
             .add_systems(
                 Update,
-                check_status.run_if(in_state(SceneState::WelcomeScene)),
+                (|mut scene_state: ResMut<NextState<SceneState>>| {
+                    scene_state.set(SceneState::TitleScene);
+                })
+                .run_if(run_once_in_state(SystemState::Loaded)),
             );
     }
 }
@@ -35,10 +41,4 @@ fn setup(mut commands: Commands) {
             ..Default::default()
         },
     ));
-}
-
-fn check_status(mut scene_state: ResMut<NextState<SceneState>>, system_status: Res<SystemStatus>) {
-    if system_status.inited_assets {
-        scene_state.set(SceneState::TitleScene);
-    }
 }
