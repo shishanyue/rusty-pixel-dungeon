@@ -2,7 +2,7 @@ use crate::{
     actors::hero::{ActiveHero, HeroType, SelectedHero, SelectedHeroEntity},
     bevy_ext::AppExt,
     custom::resource::AppResource,
-    utils::ui::create_button,
+    utils::{despawn_screen, ui::create_button},
 };
 
 use bevy::prelude::*;
@@ -27,7 +27,11 @@ impl Panel for HeroViewPanel {
         app.add_panel_system::<HeroViewPanelMark, _>(PanelState::HeroViewPanel, setup)
             .add_systems(
                 Update,
-                check_interaction.run_if(in_state(PanelState::HeroViewPanel)),
+                (
+                    check_interaction.run_if(in_state(PanelState::HeroViewPanel)),
+                    despawn_screen::<HeroViewPanelMark>
+                        .run_if(any_with_component::<ActiveHero>.and_then(run_once())),
+                ),
             );
     }
 }

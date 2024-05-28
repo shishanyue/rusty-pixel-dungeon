@@ -58,7 +58,7 @@ impl AppExt for App {
                     |mut panel_state: ResMut<NextState<PanelState>>,| {
                         panel_state.set(PanelState::None);
                     },
-                ).run_if(pressed_button(KeyCode::Escape)),
+                ).run_if(in_state(states).and_then(pressed_button(KeyCode::Escape))),
             )
     }
 }
