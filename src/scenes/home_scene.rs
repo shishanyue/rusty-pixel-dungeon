@@ -1,6 +1,6 @@
 use super::{Scene, SceneState};
 use crate::{
-    actors::hero::{ActiveHero, HeroType, SelectedHero, SelectedHeroEntity},
+    actors::hero::{ActiveHero, Hero, HeroType, SelectedHero, SelectedHeroEntity},
     bevy_ext::AppExt,
     panel::PanelState,
     room::{
@@ -24,7 +24,35 @@ impl Scene for HomeScene {
                 check_interaction.run_if(not(any_with_component::<ActiveHero>).and_then(
                     in_state(SceneState::HomeScene).and_then(in_state(PanelState::None)),
                 )),
+            )
+            .add_systems(
+                Update,
+                apply_highlight.run_if(in_state(SceneState::HomeScene).and_then(run_once())),
             );
+    }
+}
+
+static HIGHLIGHT_TINT: Highlight<StandardMaterial> = Highlight {
+    hovered: Some(HighlightKind::new_dynamic(|matl| StandardMaterial {
+        base_color: matl.base_color + Color::rgba(-0.2, -0.2, 0.4, 0.0),
+        ..matl.to_owned()
+    })),
+    pressed: Some(HighlightKind::new_dynamic(|matl| StandardMaterial {
+        base_color: matl.base_color + Color::rgba(-0.3, -0.3, 0.5, 0.0),
+        ..matl.to_owned()
+    })),
+    selected: Some(HighlightKind::new_dynamic(|matl| StandardMaterial {
+        base_color: matl.base_color + Color::rgba(-0.3, 0.2, -0.3, 0.0),
+        ..matl.to_owned()
+    })),
+};
+
+fn apply_highlight(
+    mut commands:Commands,
+    hero_entitys: Query<Entity, (With<Hero>, Without<Highlight<StandardMaterial>>)>,
+) {
+    for entity in hero_entitys.iter(){
+        commands.get_entity(entity).unwrap().insert(HIGHLIGHT_TINT.clone());
     }
 }
 
